@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +15,16 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return redirect(route('login'));
+})->name('front');
+
+
+Route::get('/clear', function () {
+	Artisan::call('optimize:clear');
+    return 'cleard';
 });
+Route::get('/undercontraction', 'HomeController@underContraction');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
