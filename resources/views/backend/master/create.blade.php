@@ -25,11 +25,6 @@
 @endsection
 @section('content')
 <div class="card card-primary">
-	<div class="card-header">
-		<h3 class="card-title">Horizontal Form</h3>
-	</div>
-	<!-- /.card-header -->
-	<!-- form start -->
 	<form action="{{ action('MasterController@store') }}" method="POST">
 		@csrf
 		<div class="card-body">
@@ -375,8 +370,7 @@
 		</div>
 		<!-- /.card-body -->
 		<div class="card-footer">
-			<button type="submit" class="btn btn-info">Sign in</button>
-			<button type="submit" class="btn btn-default float-right">Cancel</button>
+			<button type="submit" class="btn btn-info float-right">Simpan</button>
 		</div>
 		<!-- /.card-footer -->
 	</form>

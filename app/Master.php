@@ -19,8 +19,12 @@ class Master extends Model
     	"updated_by",
     ];
 
-    public function masterItem()
+    public function masterItems()
     {
     	return $this->belongsTo(MasterItem::class, 'id', 'master_id');	
+    }    
+    public function masterItemDetail()
+    {
+    	return $this->belongsTo(MasterItem::class, 'id', 'master_id')->whereNotNull('pairs')->get();	
     }
 }

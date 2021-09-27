@@ -18,7 +18,7 @@ class MasterController extends Controller
     public function index(Request $request)
     {
     	if ($request->ajax()) {
-    		$data = Master::with('masterItem')->get();
+    		$data = Master::with('masterItems')->get();
     		return Datatables::of($data)
     		->addIndexColumn()
     		->addColumn('po_no', function ($row) {
@@ -49,17 +49,10 @@ class MasterController extends Controller
     			$total_qty = $row->total_qty;
     			return $total_qty;
     		})     
-    		// ->addColumn('created_by', function ($row) {
-    		// 	$created_by = $row->dibuatOleh->name;
-    		// 	return $created_by;
-    		// })     
-    		// ->addColumn('updated_by', function ($row) {
-    		// 	$updated_by = $row->dieditOleh->name;
-    		// 	return $updated_by;
-    		// })     
     		->addColumn('action', function ($row) {
-    			$action =  '<a class="btn btn-sm btn-warning modal-button" href="Javascript:void(0)"  data-target="ModalForm" data-url=""  data-toggle="tooltip" data-placement="top" title="Edit" >Edit</a>';
-    			$action = $action .  '<a class="btn btn-sm btn-danger modal-button ml-2" href="Javascript:void(0)"  data-target="ModalForm" data-url=""  data-toggle="tooltip" data-placement="top" title="Edit" >Hapus</a>';
+    			$action =  '<a class="btn btn-sm btn-success" href="'. action('MasterController@show', $row->id) .'">Detail</a>';
+    			// $action = $action .  '<a class="btn btn-sm btn-danger  ml-2" href="Javascript:void(0)" >Hapus</a>';
+    			// $action = $action .  '<a class="btn btn-sm btn-danger modal-button ml-2" href="Javascript:void(0)"  data-target="ModalForm" data-url=""  data-toggle="tooltip" data-placement="top" title="Edit" >Hapus</a>';
 
     			return $action;
     		})
@@ -87,7 +80,6 @@ class MasterController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
 
         $master = $request->validate([
 			"po_no" => 'required',
@@ -117,12 +109,10 @@ class MasterController extends Controller
     		
     	} catch (\Exception $e) {
     		DB::rollback();
-    		dd($e->getMessage());
     		toastr()->error($e->getMessage(), 'Error');
     		return back();
     	}catch (\Throwable $e) {
     		DB::rollback();
-    		dd($e->getMessage());
     		toastr()->error($e->getMessage(), 'Error');
     		throw $e;
     	}
@@ -139,9 +129,10 @@ class MasterController extends Controller
      * @param  \App\Master  $master
      * @return \Illuminate\Http\Response
      */
-    public function show(Master $master)
+    public function show($id)
     {
-        //
+    	$master = Master::find($id);
+		return view('backend.master.show', compact('master'));
     }
 
     /**
