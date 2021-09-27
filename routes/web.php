@@ -21,10 +21,29 @@ Route::get('/', function () {
 
 Route::get('/clear', function () {
 	Artisan::call('optimize:clear');
-    return 'cleard';
+	return 'clear';
 });
-Route::get('/undercontraction', 'HomeController@underContraction');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// dibawah ini dibutuhkan akses autitentifikasi
+Route::group(['middleware' => 'auth'], function () { 
+	Route::get('/undercontraction', 'HomeController@underContraction');
+	Route::get('/home', 'HomeController@index')->name('home');
+	Route::resource('/master-barang', 'MasterController');
+
+	// command
+	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){ 
+		Route::get('/migrate', function(){
+			Artisan::call('migrate');
+			return 'Migrated';
+		});
+
+		Route::get('/clear-cache', function(){
+			Artisan::call('optimize:clear');
+
+			return 'Clear Cache';
+		});
+	});
+
+});
