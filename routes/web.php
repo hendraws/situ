@@ -35,7 +35,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('/setting-location', 'SettingLocationController');
 	Route::resource('/inspection', 'InspectionController');
 	Route::resource('/scan-out', 'ScanOutController');
-
+	Route::get('/management-user/{id}/delete', 'UserController@delete');
+	Route::resource('/management-user', 'UserController');
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){ 
 		Route::get('/migrate', function(){
