@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLokasiToScanInsTable extends Migration
+class AddStatusToMastersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddLokasiToScanInsTable extends Migration
      */
     public function up()
     {
-    	Schema::table('scan_ins', function (Blueprint $table) {
-    		$table->string('lokasi')->after('keterangan')->nullable();
-    		$table->string('balance')->after('lokasi')->nullable();
-    	});
+        Schema::table('masters', function (Blueprint $table) {
+            $table->string('status')->after('total_qty')->nullable();
+        });
     }
 
     /**
@@ -26,8 +25,8 @@ class AddLokasiToScanInsTable extends Migration
      */
     public function down()
     {
-    	Schema::table('scan_ins', function (Blueprint $table) {
+        Schema::table('masters', function (Blueprint $table) {
             //
-    	});
+        });
     }
 }

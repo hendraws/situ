@@ -26,5 +26,9 @@ class Master extends Model
     public function masterItemDetail()
     {
     	return $this->hasMany(MasterItem::class,  'master_id','id')->whereNotNull('pairs')->get();	
+    }    
+    public function masterItemWarehouse()
+    {
+    	return $this->hasMany(ScanIn::class,  'master_id','id');	
     }
 }

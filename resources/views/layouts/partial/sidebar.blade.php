@@ -35,7 +35,7 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ action('HomeController@underContraction') }}" class="nav-link">
+				<a href="{{ action('InspectionController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-archive"></i>
 					<p>
 						Inspection

@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('/master-barang', 'MasterController');
 	Route::resource('/scan-in', 'ScanInController');
 	Route::resource('/setting-location', 'SettingLocationController');
+	Route::resource('/inspection', 'InspectionController');
 
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){ 
