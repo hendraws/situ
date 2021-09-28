@@ -21,10 +21,10 @@ class Master extends Model
 
     public function masterItems()
     {
-    	return $this->belongsTo(MasterItem::class, 'id', 'master_id');	
+    	return $this->hasMany(MasterItem::class,  'master_id','id');	
     }    
     public function masterItemDetail()
     {
-    	return $this->belongsTo(MasterItem::class, 'id', 'master_id')->whereNotNull('pairs')->get();	
+    	return $this->hasMany(MasterItem::class,  'master_id','id')->whereNotNull('pairs')->get();	
     }
 }
