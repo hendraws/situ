@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::resource('/master-barang', 'MasterController');
 	Route::resource('/scan-in', 'ScanInController');
+	Route::resource('/setting-location', 'SettingLocationController');
 
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){ 

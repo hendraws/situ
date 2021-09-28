@@ -1,6 +1,6 @@
 @extends('layouts.app_master')
-@section('title', 'Scan In Warehouse')
-@section('content-title', 'Scan In Warehouse')
+@section('title', 'Setting Location')
+@section('content-title', 'Setting Location')
 @section('css')
 <link href="{{ asset('vendors/DataTables/datatables.min.css') }}" rel="stylesheet">
 @endsection
@@ -14,17 +14,19 @@
 	});
 
 	$(document).ready(function(){
-		$('#submitBtn').hide();
+		$('.card-body').hide();
 		$(document).on('keypress', '#barcode', function(e){
 			if(e.which == 13){
+				e.preventDefault();
 				Swal.fire({title: 'Loading...', icon: 'info', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true,});
 				var url = "{{ url()->current() }}?barcode_ctn="+$('#barcode').val();
 				var barcode = $('#'+$('#barcode').val());
 				if(barcode.length){
 					return Swal.fire({title: 'Data Sudah Ada...', icon: 'warning', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true,});
 				}
+				var barcode = $('#'+$('#barcode').val());
+				$('.card-body').show();
 				getData(url, "#dataBarcode");
-				$('#submitBtn').show();
 			}
 		})
 
@@ -35,31 +37,11 @@
 			if(barcode.length){
 				return Swal.fire({title: 'Data Sudah Ada...', icon: 'warning', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true,});
 			}
-			getData(url, "#dataBarcode");
 			$('#submitBtn').show();
+			getData(url, "#dataBarcode");
 		})
 	})
-	let table = $('#data-table').DataTable({
-		processing: true,
-		serverSide: true,
-		ajax: "{{ url()->full() }}",
-		pageLength: 25,
-		autoWidth: false,
-		scrollX: "100%",
-		scrollCollapse:false,
-		columnDefs: [
-		{targets: [0], className: "text-center",},
-		{targets: 0, width: "15px"},
-		],
-		columns: [
-		{data: 'DT_RowIndex', name: 'DT_RowIndex', title: '#'},
-		{data: 'barcode_ctn', name: 'barcode_ctn', title: 'BARCODE CTN'},
-		{data: 'po_no', name: 'po_no', title: 'PO NO'},
-		{data: 'article', name: 'article', title: 'ARTICLE'},
-		{data: 'no_ctn', name: 'no_ctn', title: 'NO CTN'},
-		{data: 'qty', name: 'qty', title: 'QTY'},
-		]
-	});
+
 	function getData(url, target){
 		$.ajax({
 			url: url,
@@ -78,20 +60,32 @@
 </script>
 @endsection
 @section('content')
-<div class="card ">
-	<div class="card-header">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="input-group mb-3 input-sm">
-					<input type="text" class="form-control input-sm " placeholder="Barcode No ctn" id="barcode" value="">
-					<button class="btn btn-outline-info ml-2" type="button" id="submitBarcode">Submit</button>
+<form action="{{ action('SettingLocationController@store') }}" method="POST">
+	@csrf
+	<div class="card ">
+		<div class="card-header">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="lokasi">Lokasi</label>
+						<input type="text" class="form-control" id="lokasi" placeholder="" name="lokasi">
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="exampleFormControlInput1">Barcode</label>
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" placeholder="Scan Barcode" id="barcode" aria-label="Recipient's username" aria-describedby="basic-addon2">
+							<div class="input-group-append">
+								<button class="btn btn-outline-primary" type="button" id="submitBarcode">	<i class="fa fa-plus-square"></i></button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="card-body">
-		<form action="{{ action('ScanInController@store') }}" method="POST">
-			@csrf
+		<div class="card-body">
+
 			<div class="table-responsive">
 				<table  class="table table-sm">
 					<thead class="text-center">
@@ -103,19 +97,17 @@
 						</tr>
 					</thead>
 					<tbody id="dataBarcode">
-						<tr id="tidakAdaData">
-							<td colspan="12" class="text-center bg-secondary"><h5>Tidak Ada Data</h5></td>
-						</tr>
 					</tbody>
 				</table>
-				<button class="col-md-12 btn btn-primary" id="submitBtn">SIMPAN</button>
+				<hr>
+				<div class="float-right mt-3">
+					<button class="btn btn-primary" id="submitBtn">SIMPAN</button>
+					<a href="{{ action('SettingLocationController@index') }}" class="btn btn-warning">
+						CANCEL
+					</a>
+				</div>
 			</div>
-		</form>
+		</div>
 	</div>
-	<div class="card-footer">
-		<h2>Data Warehouse</h2>
-		<table id="data-table" class="table table-bordered table-striped">
-		</table>
-	</div>
-</div>
+</form>
 @endsection

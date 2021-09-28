@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ScanIn extends Model
 {
-	protected $fillable = [ 'master_items_id', 'master_id', 'barcode_ctn','no_ctn','pairs','size', 'status', 'keterangan', 'created_by' ];
+	protected $fillable = [ 'master_items_id', 'master_id', 'barcode_ctn','no_ctn','pairs','size', 'status', 'keterangan', 'created_by','lokasi' ];
 	public function Master()
 	{
 		return $this->belongsTo(Master::class,  'master_id','id');	
