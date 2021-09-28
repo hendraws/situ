@@ -33,7 +33,7 @@
 						<select class="form-control" id="po" name="po_no">
 							<option disabled="" selected="">Pilih PO</option>
 							@foreach ($masters as $val)
-							<option value="{{ $val->po_no }}"> {{ $val->po_no }}</option>
+							<option value="{{ $val->id }}"> {{ $val->po_no }}</option>
 							@endforeach
 						</select>
 					</div>

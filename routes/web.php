@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('/scan-in', 'ScanInController');
 	Route::resource('/setting-location', 'SettingLocationController');
 	Route::resource('/inspection', 'InspectionController');
+	Route::resource('/scan-out', 'ScanOutController');
 
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){ 

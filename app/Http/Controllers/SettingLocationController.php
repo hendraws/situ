@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MasterItem;
 use App\ScanIn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class SettingLocationController extends Controller
 
     	if($request->ajax()) {
     		if($request->has('barcode_ctn')){    			
-    			$data = ScanIn::where('barcode_ctn', $request->barcode_ctn)->first();
+    			$data = MasterItem::where('barcode_ctn', $request->barcode_ctn)->where('modul','scanin')->first();
     			return view('backend.setting_location.table', compact('data'));
     		}
 
@@ -52,7 +53,7 @@ class SettingLocationController extends Controller
         DB::beginTransaction();
     	try {
     		foreach ($request->scan_in_id as $key => $value) {
-    			$scanIn = ScanIn::where('id',$value)->first();
+    			$scanIn = MasterItem::where('id',$value)->first();
     			$scanIn->update([
     				'lokasi' => $request->lokasi,
     			]);    			

@@ -1,6 +1,6 @@
 @extends('layouts.app_master')
-@section('title', 'Scan In Warehouse')
-@section('content-title', 'Scan In Warehouse')
+@section('title', 'Scan Out To Container')
+@section('content-title', 'Scan Out To Container')
 @section('css')
 <link href="{{ asset('vendors/DataTables/datatables.min.css') }}" rel="stylesheet">
 @endsection
@@ -90,7 +90,7 @@
 		</div>
 	</div>
 	<div class="card-body">
-		<form action="{{ action('ScanInController@store') }}" method="POST">
+		<form action="{{ action('ScanOutController@store') }}" method="POST">
 			@csrf
 			<div class="table-responsive">
 				<table  class="table table-sm">
@@ -112,8 +112,9 @@
 			</div>
 		</form>
 	</div>
+	
 	<div class="card-footer">
-		<h5>Data Scan In Warehouse</h5>
+		<h5>Data Scan Out To Container</h5>
 		<table id="data-table" class="table table-bordered table-striped">
 		</table>
 	</div>

@@ -116,6 +116,9 @@ class MasterController extends Controller
     		 		'pairs' => $request->qty_ctn[$value][$k],
     		 		'no_ctn' => $request->no_ctn[$value][$k],
     		 		'barcode_ctn' => $request->barcode_ctn[$value][$k],
+    		 		'modul' => 'master',
+    		 		'keterangan' => 'master',
+    		 		// 'status' => 
 	    		 	]);
     			}
     		}
@@ -132,7 +135,7 @@ class MasterController extends Controller
 
     	DB::commit();
     	toastr()->success('Data telah ditambahkan', 'Berhasil');
-    	return back();
+    	return redirect( action('MasterController@index'));
 
     }
 

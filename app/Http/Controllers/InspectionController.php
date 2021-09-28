@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Master;
+use App\MasterItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,10 @@ class InspectionController extends Controller
      */
     public function index()
     {
-    	$masters = Master::with('masterItemWarehouse')
-    				->has('masterItemWarehouse')
+    	$masters = Master::with('masterItems')
+    				->whereHas('masterItems', function($q) {
+    					$q->where('modul','scanin');
+    				})
     				->get();
 
         return view('backend.inspection.index', compact('masters'));
@@ -43,8 +46,12 @@ class InspectionController extends Controller
     	// dd($request);
         DB::beginTransaction();
     	try {
-    		
-    		$masters = Master::where('po_no', $request->po_no)->update(['status'=>$request->status]);
+    		$masters = MasterItem::where('master_id',$request->po_no)->where('modul','scanin')->get();
+    		// dd($masters);
+    		foreach ($masters as $key => $value) {
+    			MasterItem::whereId($value->id)->update(['status'=>$request->status]);
+    		}
+    		// $masters = Master::where('id', $request->po_no)->update(['status'=>$request->status]);
     	} catch (\Exception $e) {
     		DB::rollback();
     		toastr()->error($e->getMessage(), 'Error');

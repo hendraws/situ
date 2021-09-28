@@ -20,11 +20,13 @@ class ScanInController extends Controller
     {
     	if($request->ajax()) {
     		if($request->has('barcode_ctn')){    			
-    			$data = MasterItem::where('barcode_ctn', $request->barcode_ctn)->first();
+    			$data = MasterItem::where('barcode_ctn', $request->barcode_ctn)
+    					->where('modul','master')
+    					->first();
     			return view('backend.scan_in.table', compact('data'));
     		}
 
-    		$data = ScanIn::with('Master')->get();
+    		$data = MasterItem::with('Master')->where('modul','scanin')->get();
     		return Datatables::of($data)
     		->addIndexColumn()
     		->addColumn('po_no', function ($row) {
@@ -75,23 +77,10 @@ class ScanInController extends Controller
     	DB::beginTransaction();
     	try {
     		foreach ($request->master_item_id as $key => $value) {
-    			$masterItem = MasterItem::where('id',$value)->first();
-    			ScanIn::create([
-    				'master_id' => $masterItem->master_id,
-    				'barcode_ctn'=> $masterItem->barcode_ctn,
-    				'no_ctn' => $masterItem->no_ctn,
-    				'pairs'=> $masterItem->pairs,
-    				'size'=> $masterItem->size,
+    			$masterItem = MasterItem::where('id',$value)->update([
+    				'modul' => 'scanin',
     				'keterangan' => 'warehouse',
-    				'created_by' => auth()->user()->id,
-    			]);
-
-    			$master = Master::where('id', $masterItem->master_id)->first();
-    			$master->update([
-    				'total_qty' => $master->total_qty - $masterItem->pairs
-    			]);
-
-    			$masterItem->delete();    			
+    			]);		
     		}
     		// dd('asdfa');
     	} catch (\Exception $e) {
