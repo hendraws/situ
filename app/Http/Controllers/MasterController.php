@@ -80,7 +80,7 @@ class MasterController extends Controller
      */
     public function store(Request $request)
     {
-
+    	// dd($request->all());
         $master = $request->validate([
 			"po_no" => 'required',
 			"order_no" => 'required',
@@ -97,16 +97,29 @@ class MasterController extends Controller
     		$master['created_by'] = auth()->user()->id;
     		$masterData = Master::create($master);
 
-    		for ($i=0; $i < count($request->barcode_ctn) ; $i++) { 
-    		 	MasterItem::create([
-    		 		'master_id' => $masterData->id,
-    		 		'size' => $request->size[$i],
-    		 		'pairs' => $request->pairs[$i],
-    		 		'no_ctn' => $request->no_ctn[$i],
-    		 		'barcode_ctn' => $request->barcode_ctn[$i],
-    		 	]);
-    		 } 
+    		// for ($i=0; $i < count($request->size) ; $i++) { 
+    		//  	MasterItem::create([
+    		//  		'master_id' => $masterData->id,
+    		//  		'size' => $request->size[$i],
+    		//  		'pairs' => $request->pairs[$i],
+    		//  		'no_ctn' => $request->no_ctn[$i],
+    		//  		'barcode_ctn' => $request->barcode_ctn[$i],
+    		//  	]);
+    		//  } 
     		
+    		foreach ($request->size as $key => $value) {
+    			foreach ($request->no_ctn[$value] as $k => $v) {
+    				// dd($v, $request->barcode_ctn[$value][$k]);
+    				MasterItem::create([
+    		 		'master_id' => $masterData->id,
+    		 		'size' => $value,
+    		 		'pairs' => $request->qty_ctn[$value][$k],
+    		 		'no_ctn' => $request->no_ctn[$value][$k],
+    		 		'barcode_ctn' => $request->barcode_ctn[$value][$k],
+	    		 	]);
+    			}
+    		}
+    		// dd('asdfa');
     	} catch (\Exception $e) {
     		DB::rollback();
     		toastr()->error($e->getMessage(), 'Error');

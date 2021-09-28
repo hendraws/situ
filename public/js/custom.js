@@ -19,3 +19,17 @@ $(document).on("click", ".modal-button", function() {
         $('#ModalForm').modal('show').find('.modal-content-form').load(modalID);
     }
 });
+
+function getDataTable(url, target){
+	$.ajax({
+		url: url,
+		type: "get",
+		datatype: "html"
+	}).done(function(data){
+		Swal.fire({title: 'Selesai', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 5000, timerProgressBar: true,});
+		$(target).empty().html(data);
+		$('[data-toggle="tooltip"]').tooltip();
+	}).fail(function(jqXHR, ajaxOptions, thrownError){
+		Swal.fire({html: 'No response from server', icon: 'error', toast: true, position: 'top-end', showConfirmButton: false, timer: 10000, timerProgressBar: true,});
+	});
+}

@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/undercontraction', 'HomeController@underContraction');
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::resource('/master-barang', 'MasterController');
+	Route::resource('/scan-in', 'ScanInController');
 
 	// command
 	Route::group(['prefix'=>'/command/artisan','as'=>'account.'], function(){ 
@@ -41,7 +42,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::get('/clear-cache', function(){
 			Artisan::call('optimize:clear');
-
 			return 'Clear Cache';
 		});
 	});
