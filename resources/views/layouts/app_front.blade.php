@@ -23,7 +23,7 @@
 		<!-- Navbar -->
 		<nav class="main-header navbar navbar-expand-md navbar-orange navbar-dark">
 			<div class="container">
-				<a href="../../index3.html" class="navbar-brand">
+				<a href="/" class="navbar-brand">
 					<img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
 					style="opacity: .8">
 					<span class="brand-text font-weight-light">SITU</span>
@@ -34,7 +34,7 @@
 					<!-- Messages Dropdown Menu -->
 					<li class="nav-item dropdown">
 						<li class="nav-item">
-							<a href="{{ '' }}" class="nav-link"><b>Tracking</b></a>
+							<a href="{{ action('FrontController@index') }}" class="nav-link"><b>Tracking</b></a>
 						</li>	
 						<li class="nav-item">
 							<a href="{{ route('login') }}" class="nav-link"><b>Login</b></a>
