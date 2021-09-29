@@ -1,6 +1,6 @@
 @extends('layouts.app_master')
-@section('title', 'Detail Master')
-@section('content-title', 'Detail Master')
+@section('title', 'Detail Scan Out')
+@section('content-title', 'Detail Scan Out')
 @section('css')
 <link href="{{ asset('vendors/DataTables/datatables.min.css') }}" rel="stylesheet">
 @endsection
@@ -42,7 +42,7 @@
 			</div>
 			<div class="col-md-6 row">
 				<div class="col-md-3">Total Qty</div>
-				<div class="col-md-8"><span class="mx-3">:</span>{{ $master->total_qty }}</div>
+				<div class="col-md-8"><span class="mx-3">:</span>{{ $master->masterItemsOnContainer->sum('pairs') }}</div>
 			</div>
 		</div>
 	</div>
@@ -51,28 +51,34 @@
 		@php
 		$no = 1;
 		@endphp
+		
 		<div class="col-md-12">
 			<table class="table text-center">
 				<thead class="thead-light">
 					<tr>
+						<th scope="col">Barcode CTN</th>
+						<th scope="col">No CTN</th>
 						<th scope="col">Size</th>
 						<th scope="col">Pairs</th>
-						<th scope="col">No CTN</th>
-						<th scope="col">Barcode CTN</th>
+						<th scope="col">Lokasi</th>
+						<th scope="col">Status</th>
 					</tr>
 				</thead>
 				<tbody>
-					@foreach ($master->masterItems as $val)
+					@foreach($master->masterItemsOnContainer as $item)
 					<tr>
-						<td>{{ $val->size  }}	</td>
-						<td>{{ $val->pairs  }}	</td>
-						<td>{{ $val->no_ctn ?? '-'  }}	</td>
-						<td>{{ $val->barcode_ctn  }}	</td>
+						<td>{{ $item->barcode_ctn  }}	</td>
+						<td>{{ $item->no_ctn ?? '-'  }}	</td>
+						<td>{{ $item->size  }}	</td>
+						<td>{{ $item->pairs  }}	</td>
+						<td>{{ $item->lokasi  }}	</td>
+						<td>{{ $item->status  }}	</td>
 					</tr>
 					@endforeach
 				</tbody>
 			</table>
 		</div>
+
 	</div>
 </div>
 {{-- {{ dd($master) }} --}}

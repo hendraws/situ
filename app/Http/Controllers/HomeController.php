@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Master;
+use App\MasterItem;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -14,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+    	$this->middleware('auth');
     }
 
     /**
@@ -26,22 +27,30 @@ class HomeController extends Controller
     {
 
     	if($request->ajax()) {
-    		if($request->has('tracking')){    			
-    			$dataMaster = Master::with('masterItems')
-    					->whereHas('masterItems', function ($q){
-    						$q->Where('lokasi', request()->tracking);
-    					})
-    					->orWhere('po_no', $request->tracking)
-    					->orWhere('article', $request->tracking)
-    					->first();
-    			return view('backend.dashboard.table', compact( 'dataMaster'));
-    		}
+    		if(!empty($request->no_ctn)){
+    			$data = MasterItem::where('modul','scanin')
+    			->where('no_ctn', request()->no_ctn)
+    			->get();
+    			return view('backend.dashboard.table_item', compact( 'data'));
+    		}    			
+    		$data = Master::with('masterItemsOnWarehouse')
+    		// ->whereHas('masterItemsOnWarehouse', function ($q){
+    		// 	$q->where('modul','scanin')
+    		// 	->Where('no_ctn', request()->no_ctn);
+    		// })
+    		->orWhere('po_no', $request->po)
+    		->orWhere('article', $request->article)
+    					// ->orWhere('article', $request->tracking)
+    		->get();
+
+    		return view('backend.dashboard.table', compact( 'data'));
+    		
     	}
-        return view('backend.dashboard.index');
+    	return view('backend.dashboard.index');
     }
 
     public function underContraction()
-	{
-		return view('under_contraction');
-	}
+    {
+    	return view('under_contraction');
+    }
 }

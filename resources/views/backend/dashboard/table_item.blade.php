@@ -1,4 +1,4 @@
-@foreach ($data as $dataMaster)
+@foreach ($data as $val)
 <div class="row justify-content-center">
 	<div class="col-md-12">
 		<div class="card card-body">
@@ -13,22 +13,18 @@
 							<th scope="col">ITEM</th>
 							<th scope="col">ARTICLE</th>
 							<th scope="col">COLOUR</th>
-							<th scope="col">Balance</th>
 						</tr>
 					</thead>
 					<tbody id="dataBarcode">
 						<tr class="text-center">
-							@php
-								$balance = (optional($dataMaster->masterItemsOnWarehouse)->sum('pairs') ?? 0) - ($dataMaster->total_qty ?? 0) + (optional($dataMaster->masterItemsOnContainer)->sum('pairs') ?? 0); 
-							@endphp
-							<td>{{ $dataMaster->po_no }}</td>
-							<td>{{ $dataMaster->order_no }}</td>
-							<td>{{ $dataMaster->customer }}</td>
-							<td>{{ $dataMaster->customer_no }}</td>
-							<td>{{ $dataMaster->item }}</td>
-							<td>{{ $dataMaster->article }}</td>
-							<td>{{ $dataMaster->colour }}</td>
-							<td class="{{ $balance == 0 ? 'bg-success' : 'bg-warning' }}">{{$balance }}</td>
+			
+							<td>{{ optional($val->Master)->po_no }}</td>
+							<td>{{ optional($val->Master)->order_no }}</td>
+							<td>{{ optional($val->Master)->customer }}</td>
+							<td>{{ optional($val->Master)->customer_no }}</td>
+							<td>{{ optional($val->Master)->item }}</td>
+							<td>{{ optional($val->Master)->article }}</td>
+							<td>{{ optional($val->Master)->colour }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -48,7 +44,6 @@
 						</tr>
 					</thead>
 					<tbody id="dataBarcode">
-						@forelse($dataMaster->masterItemsOnWarehouse as $val)
 						<tr class="text-center">
 							<th>{{ $val->barcode_ctn }}</th>
 							<td>{{ $val->size }}</td>
@@ -58,9 +53,6 @@
 							<td>{{ $val->status }}</td>
 							<td>{{ $val->keterangan != 'master' ? 'Berada di ' . $val->keterangan : '' }}</td>
 						</tr>
-						@empty
-						<tr class="text-center"><th colspan="6">Tidak Ada Data Di Warehouse</th></tr>
-						@endforelse
 					</tbody>
 				</table>
 			</div>

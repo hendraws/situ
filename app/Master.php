@@ -22,6 +22,15 @@ class Master extends Model
     public function masterItems()
     {
     	return $this->hasMany(MasterItem::class,  'master_id','id');	
+    }     
+    public function masterItemsOnWarehouse()
+    {
+    	return $this->hasMany(MasterItem::class,  'master_id','id')->where('modul', 'scanin');	
+    }      
+
+    public function masterItemsOnContainer()
+    {
+    	return $this->hasMany(MasterItem::class,  'master_id','id')->where('modul', 'scanout');	
     }    
     public function masterItemDetail()
     {

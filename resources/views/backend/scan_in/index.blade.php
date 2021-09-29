@@ -48,16 +48,16 @@
 		scrollX: "100%",
 		scrollCollapse:false,
 		columnDefs: [
-		{targets: [0], className: "text-center",},
+		{targets: [0,1,2,3,4,5], className: "text-center",},
 		{targets: 0, width: "15px"},
 		],
 		columns: [
 		{data: 'DT_RowIndex', name: 'DT_RowIndex', title: '#'},
-		{data: 'barcode_ctn', name: 'barcode_ctn', title: 'BARCODE CTN'},
 		{data: 'po_no', name: 'po_no', title: 'PO NO'},
 		{data: 'article', name: 'article', title: 'ARTICLE'},
-		{data: 'no_ctn', name: 'no_ctn', title: 'NO CTN'},
-		{data: 'qty', name: 'qty', title: 'QTY'},
+		{data: 'qty', name: 'qty', title: 'TOTAL QTY'},
+		{data: 'balance', name: 'balance', title: 'BALANCE'},
+		{data: 'action', name: 'action', title: ''},
 		]
 	});
 	function getData(url, target){

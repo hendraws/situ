@@ -25,31 +25,33 @@ class ScanInController extends Controller
     					->first();
     			return view('backend.scan_in.table', compact('data'));
     		}
+    		// po, art, total qty dan balance
+    		$data = Master::with('masterItemsOnWarehouse')->get();
 
-    		$data = MasterItem::with('Master')->where('modul','scanin')->get();
     		return Datatables::of($data)
     		->addIndexColumn()
     		->addColumn('po_no', function ($row) {
-    			$po_no = optional($row->Master)->po_no;
+    			$po_no = $row->po_no;
     			return $po_no;
     		})
     		->addColumn('article', function ($row) {
-    			$article = optional($row->Master)->article;
+    			$article = $row->article;
     			return $article;
     		})        		
-    		->addColumn('barcode_ctn', function ($row) {
-    			$barcode_ctn = $row->barcode_ctn;
-    			return $barcode_ctn;
-    		})    
-    		->addColumn('no_ctn', function ($row) {
-    			$no_ctn = $row->no_ctn;
-    			return $no_ctn;
-    		})     			
     		->addColumn('qty', function ($row) {
-    			$qty = $row->pairs;
+    			$qty = (optional($row->masterItemsOnWarehouse)->sum('pairs') ?? 0) ;
     			return $qty;
     		})     
-    		// ->rawColumns(['action'])
+    		->addColumn('balance', function ($row) {
+				$balance = (optional($row->masterItemsOnWarehouse)->sum('pairs') ?? 0) - ($row->total_qty ?? 0) + (optional($row->masterItemsOnContainer)->sum('pairs') ?? 0); 
+				$bg = $balance == 0 ? 'bg-success' : 'bg-warning';
+    			return '<div class="'. $bg .'">'.$balance.'</div>';
+    		})     
+    		->addColumn('action', function ($row) {
+				$action =  '<a class="btn btn-sm btn-success" href="'. action('ScanInController@show', $row->id) .'">Detail</a>';
+    			return $action;
+    		})     
+    		->rawColumns(['balance','action'])
     		->make(true);
     	}
 
@@ -104,30 +106,11 @@ class ScanInController extends Controller
      * @param  \App\ScanIn  $scanIn
      * @return \Illuminate\Http\Response
      */
-    public function show(ScanIn $scanIn)
+    public function show($id)
     {
 
-    	DB::beginTransaction();
-    	try {
-    		foreach ($request->master_item_id as $key => $value) {
-    			$masterItem = MasterItem::where('id',$value)->first();
-    			dd($masterItem);
-    			
-    		}
-    		// dd('asdfa');
-    	} catch (\Exception $e) {
-    		DB::rollback();
-    		toastr()->error($e->getMessage(), 'Error');
-    		return back();
-    	}catch (\Throwable $e) {
-    		DB::rollback();
-    		toastr()->error($e->getMessage(), 'Error');
-    		throw $e;
-    	}
-
-    	DB::commit();
-    	toastr()->success('Data telah ditambahkan', 'Berhasil');
-    	return back();
+    	$master = Master::find($id);
+		return view('backend.scan_in.show', compact('master'));
 
     }
 

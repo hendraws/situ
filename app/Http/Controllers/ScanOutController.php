@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Master;
 use App\MasterItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,30 +19,32 @@ class ScanOutController extends Controller
 				return view('backend.scan_in.table', compact('data'));
 			}
 
-			$data = MasterItem::with('Master')->where('modul','scanout')->get();
+			$data = Master::with('masterItemsOnContainer')->get();
+
 			return Datatables::of($data)
 			->addIndexColumn()
 			->addColumn('po_no', function ($row) {
-				$po_no = optional($row->Master)->po_no;
+				$po_no = $row->po_no;
 				return $po_no;
 			})
 			->addColumn('article', function ($row) {
-				$article = optional($row->Master)->article;
+				$article = $row->article;
 				return $article;
 			})        		
-			->addColumn('barcode_ctn', function ($row) {
-				$barcode_ctn = $row->barcode_ctn;
-				return $barcode_ctn;
-			})    
-			->addColumn('no_ctn', function ($row) {
-				$no_ctn = $row->no_ctn;
-				return $no_ctn;
-			})     			
 			->addColumn('qty', function ($row) {
-				$qty = $row->pairs;
+				$qty = optional($row->masterItemsOnContainer)->sum('pairs') ?? 0;
 				return $qty;
 			})     
-    		// ->rawColumns(['action'])
+			->addColumn('balance', function ($row) {
+				$balance = (optional($row->masterItemsOnContainer)->sum('pairs') ?? 0)  -  ($row->total_qty ?? 0)  ; 
+				$bg = $balance == 0 ? 'bg-success' : 'bg-warning';
+				return '<div class="'. $bg .'">'.$balance.'</div>';
+			})     
+			->addColumn('action', function ($row) {
+				$action =  '<a class="btn btn-sm btn-success" href="'. action('ScanOutController@show', $row->id) .'">Detail</a>';
+				return $action;
+			})     
+			->rawColumns(['balance','action'])
 			->make(true);
 		}
 
@@ -73,4 +76,11 @@ class ScanOutController extends Controller
 		toastr()->success('Data telah ditambahkan', 'Berhasil');
 		return back();
 	}
+
+	public function show($id)
+    {
+    	$master = Master::find($id);
+		return view('backend.scan_out.show', compact('master'));
+
+    }
 }
