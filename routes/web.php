@@ -14,9 +14,12 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Route::get('/', function () {
-	return redirect(route('login'));
-})->name('front');
+// Route::view('/', 'For');
+Route::get('/', 'FrontController@index');
+
+// Route::get('/', function () {
+// 	return redirect(route('login'));
+// })->name('front');
 
 
 Route::get('/clear', function () {
