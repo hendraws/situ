@@ -13,7 +13,6 @@
 							<th scope="col">ITEM</th>
 							<th scope="col">ARTICLE</th>
 							<th scope="col">COLOUR</th>
-							<th scope="col">Balance</th>
 						</tr>
 					</thead>
 					<tbody id="dataBarcode">
@@ -28,7 +27,6 @@
 							<td>{{ $dataMaster->item }}</td>
 							<td>{{ $dataMaster->article }}</td>
 							<td>{{ $dataMaster->colour }}</td>
-							<td class="{{ $balance == 0 ? 'bg-success' : 'bg-warning' }}">{{$balance }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -43,8 +41,6 @@
 							<th scope="col">PAIRS</th>
 							<th scope="col">NO CTN</th>
 							<th scope="col">Lokasi</th>
-							<th scope="col">Status</th>
-							<th scope="col">Keterangan</th>
 						</tr>
 					</thead>
 					<tbody id="dataBarcode">
@@ -55,8 +51,6 @@
 							<td>{{ $val->pairs }}</td>
 							<td>{{ $val->no_ctn }}</td>
 							<td>{{ $val->lokasi }}</td>
-							<td>{{ $val->status }}</td>
-							<td>{{ $val->keterangan != 'master' ? 'Berada di ' . $val->keterangan : '' }}</td>
 						</tr>
 						@empty
 						<tr class="text-center"><th colspan="6">Tidak Ada Data Di Warehouse</th></tr>

@@ -39,8 +39,6 @@
 							<th scope="col">PAIRS</th>
 							<th scope="col">NO CTN</th>
 							<th scope="col">Lokasi</th>
-							<th scope="col">Status</th>
-							<th scope="col">Keterangan</th>
 						</tr>
 					</thead>
 					<tbody id="dataBarcode">
@@ -50,8 +48,6 @@
 							<td>{{ $val->pairs }}</td>
 							<td>{{ $val->no_ctn }}</td>
 							<td>{{ $val->lokasi }}</td>
-							<td>{{ $val->status }}</td>
-							<td>{{ $val->keterangan != 'master' ? 'Berada di ' . $val->keterangan : '' }}</td>
 						</tr>
 					</tbody>
 				</table>
