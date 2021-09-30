@@ -66,6 +66,9 @@
 	<div id="result">
 		
 	</div>
+		<div id="tableResult">
+		
+	</div>
 {{-- 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<div class="card card-body" id="result">

@@ -7,6 +7,7 @@ use Faker\Provider\password;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -42,9 +43,9 @@ class UserController extends Controller
 
 	public function create()
 	{
+		$permission = Permission::get();
 
-
-		return view('backend.user.create');	
+		return view('backend.user.create',compact('permission'));	
 	}
 
 	public function store(Request $request)
@@ -62,6 +63,9 @@ class UserController extends Controller
 				'email' => $request->email,
 				'password' => Hash::make($request->password),
 			]);
+			if($request->has('permission')){
+				$user->syncPermissions($request->permission);
+			}
 
 		} catch (\Exception $e) {
 			DB::rollback();
@@ -118,18 +122,18 @@ class UserController extends Controller
 		return redirect(action('UserController@index'));
 	}
 
-    public function destroy($id)
-    {
-    	$data = User::find($id);
-    	$data->delete();
-    	toastr()->success('Data telah hapus', 'Berhasil');
-    	return back();
-    }
+	public function destroy($id)
+	{
+		$data = User::find($id);
+		$data->delete();
+		toastr()->success('Data telah hapus', 'Berhasil');
+		return back();
+	}
 
 
-    public function delete($id)
-    {
-    	$data = User::find($id);
-    	return view('backend.user.delete', compact('data'));
-    }
+	public function delete($id)
+	{
+		$data = User::find($id);
+		return view('backend.user.delete', compact('data'));
+	}
 }

@@ -10,6 +10,7 @@
 					</p>
 				</a>
 			</li>	
+			@can('data-master')
 			<li class="nav-item has-treeview">
 				<a href="#" class="nav-link">
 					<i class="nav-icon fa fa-database"></i>
@@ -33,6 +34,8 @@
 					</li>
 				</ul>
 			</li>
+			@endcan
+			@can('scan-in')
 			<li class="nav-item">
 				<a href="{{ action('ScanInController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-barcode"></i>
@@ -41,6 +44,8 @@
 					</p>
 				</a>
 			</li>	
+			@endcan
+			@can('setting-location')
 			<li class="nav-item">
 				<a href="{{ action('SettingLocationController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-map-pin"></i>
@@ -49,6 +54,8 @@
 					</p>
 				</a>
 			</li>
+			@endcan
+			@can('inspection')
 			<li class="nav-item">
 				<a href="{{ action('InspectionController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-archive"></i>
@@ -57,6 +64,8 @@
 					</p>
 				</a>
 			</li>
+			@endcan
+			@can('scan-out')
 			<li class="nav-item">
 				<a href="{{ action('ScanOutController@index') }}" class="nav-link">
 					<i class="nav-icon fa fa-barcode"></i>
@@ -65,7 +74,7 @@
 					</p>
 				</a>
 			</li>	
-			
+			@endcan
 		</ul>
 
 	</nav>
