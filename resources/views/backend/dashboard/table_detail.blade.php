@@ -6,7 +6,7 @@
 			<div class="table-responsive">
 				<table  class="table table-sm ">
 					<thead class="text-center">
-						<tr class="text-center table-info">
+						<tr class="text-center table-warning">
 							<th scope="col">BARCODE</th>
 							<th scope="col">SIZE</th>
 							<th scope="col">NO CTN</th>
