@@ -147,4 +147,12 @@ class ScanInController extends Controller
     {
         //
     }
+
+    public function print()
+    {
+    	$master = Master::join('master_items','master_items.master_id', 'masters.id')
+			->where('modul','scanin')
+			->get();
+    	return view('backend.scan_in.print', compact('master'));
+    }
 }

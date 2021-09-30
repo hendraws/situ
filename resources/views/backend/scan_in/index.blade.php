@@ -1,6 +1,13 @@
 @extends('layouts.app_master')
 @section('title', 'Scan In Warehouse')
 @section('content-title', 'Scan In Warehouse')
+@section('button-title')
+<div class="float-right">
+<a href="{{ action('ScanInController@print' )}}" class="btn btn-success"><i class="fa fa-print"></i> <span>Print</span></a>
+</div>
+
+@endsection
+
 @section('css')
 <link href="{{ asset('vendors/DataTables/datatables.min.css') }}" rel="stylesheet">
 @endsection
