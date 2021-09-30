@@ -34,6 +34,21 @@
 					<input  type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" value="" name="password_confirmation">
 				</div>
 			</div>
+			@if(auth()->user()->name == 'super-admin')
+			<div class="form-group row">
+				<label for="staticEmail" class="col-sm-3 col-form-label">Permission</label>
+				<div class="col-sm-9">
+					@foreach ($permission as $val)
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" name='permission[]' value="{{ $val->name }}" id="{{ $val->id }}" {{ in_array($val->id, $userPermission->toArray()) ? 'checked' : ''}}>
+						<label class="form-check-label" for="{{ $val->id }}">
+							{{ $val->name }}
+						</label>
+					</div>
+					@endforeach
+				</div>
+			</div>
+			@endif
 			<div class="modal-footer">
 				<a class="btn btn-secondary" href="{{ action('UserController@index') }}">Kembali</a>
 				<button class="btn btn-brand btn-square btn-primary">Simpan</button>

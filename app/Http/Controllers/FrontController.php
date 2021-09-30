@@ -44,7 +44,7 @@ class FrontController extends Controller
 				$q->where('article', request()->article);
 			})
 			->when(empty($request->detail), function($q){
-				$q->selectRaw('po_no, order_no, sum(pairs) as qty_ctn, item, article, lokasi')
+				$q->selectRaw('po_no, order_no, count(no_ctn) as qty_ctn, item, article, lokasi')
 				->groupBy('po_no')
 				->groupBy('article')
 				->groupBy('lokasi');
@@ -56,7 +56,7 @@ class FrontController extends Controller
 			if($request->has('detail')){
 				return view('backend.dashboard.table_detail', compact( 'data'));
 			}
-    		// dd($data->toArray());
+
 			return view('backend.dashboard.table', compact( 'data'));
 
 		}

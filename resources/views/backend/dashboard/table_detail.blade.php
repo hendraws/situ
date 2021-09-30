@@ -10,6 +10,7 @@
 							<th scope="col">BARCODE</th>
 							<th scope="col">SIZE</th>
 							<th scope="col">NO CTN</th>
+							<th scope="col">STATUS</th>
 							<th scope="col">LOKASI</th>
 						</tr>
 					</thead>
@@ -19,6 +20,7 @@
 							<td>{{ $dataMaster->barcode_ctn }}</td>
 							<td>{{ $dataMaster->size }}</td>
 							<td>{{ $dataMaster->no_ctn }}</td>
+							<td>{{ $dataMaster->status }}</td>
 							<td>{{ $dataMaster->lokasi }}</td>
 						</tr>
 						@endforeach

@@ -85,7 +85,9 @@ class UserController extends Controller
 	public function edit($id)
 	{
 		$data = User::find($id);
-		return view('backend.user.edit', compact('data'));
+		$userPermission = $data->getAllPermissions()->pluck('id');
+		$permission = Permission::get();
+		return view('backend.user.edit', compact('data','permission','userPermission'));
 	}
 
 	public function update(Request $request, $id)
@@ -105,7 +107,9 @@ class UserController extends Controller
 				'email' => $request->email,
 				'password' =>  $pass,
 			]);
-
+			if($request->has('permission')){
+				$user->syncPermissions($request->permission);
+			}
 
 		} catch (\Exception $e) {
 			DB::rollback();

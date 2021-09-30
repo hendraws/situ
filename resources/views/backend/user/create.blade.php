@@ -33,6 +33,7 @@
 					<input required type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" value="" name="password_confirmation">
 				</div>
 			</div>	
+			@if(auth()->user()->name == 'super-admin')
 			<div class="form-group row">
 				<label for="staticEmail" class="col-sm-3 col-form-label">Permission</label>
 				<div class="col-sm-9">
@@ -43,11 +44,10 @@
 							{{ $val->name }}
 						</label>
 					</div>
-
 					@endforeach
-
 				</div>
 			</div>
+			@endif
 
 
 			<div class="modal-footer">

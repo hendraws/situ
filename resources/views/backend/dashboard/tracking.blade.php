@@ -26,6 +26,7 @@
 				datatype: "html"
 			}).done(function(data){
 				Swal.fire({title: 'Selesai', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 5000, timerProgressBar: true,});
+				$('#tableResult').empty();
 				$(target).html(data);
 				$('[data-toggle="tooltip"]').tooltip();
 			}).fail(function(jqXHR, ajaxOptions, thrownError){
@@ -63,12 +64,8 @@
 			</div>
 		</div>
 	</div>
-	<div id="result">
-		
-	</div>
-		<div id="tableResult">
-		
-	</div>
+	<div id="result"></div>
+	<div id="tableResult"></div>
 {{-- 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<div class="card card-body" id="result">

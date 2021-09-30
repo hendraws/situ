@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/undercontraction', 'HomeController@underContraction');
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::resource('/master-barang', 'MasterController');
+	Route::get('/master/{id}/delete/', 'MasterController@delete');
 	Route::resource('/scan-in', 'ScanInController');
 	Route::resource('/setting-location', 'SettingLocationController');
 	Route::resource('/inspection', 'InspectionController');

@@ -50,16 +50,15 @@ class MasterController extends Controller
     			return $total_qty;
     		})     
     		->addColumn('action', function ($row) {
-    			$action =  '<a class="btn btn-sm btn-success" href="'. action('MasterController@show', $row->id) .'">Detail</a>';
-    			// $action = $action .  '<a class="btn btn-sm btn-danger  ml-2" href="Javascript:void(0)" >Hapus</a>';
-    			// $action = $action .  '<a class="btn btn-sm btn-danger modal-button ml-2" href="Javascript:void(0)"  data-target="ModalForm" data-url=""  data-toggle="tooltip" data-placement="top" title="Edit" >Hapus</a>';
-
+    			$action =  '<a class="btn  btn-success btn-sm m" href="'. action('MasterController@show', $row->id) .'">Detail</a>';
+    			$action = $action .  '<a class="btn btn-sm btn-warning m-1" href="'. action('MasterController@edit', $row->id) .'" >Edit</a>';
+    			$action = $action .  '<a class="btn btn-sm btn-danger modal-button" href="Javascript:void(0)"  data-target="ModalForm" data-url="'.action('MasterController@delete',$row->id).'"  data-toggle="tooltip" data-placement="top" title="Edit" >Hapus</a>';
     			return $action;
     		})
     		->rawColumns(['action'])
     		->make(true);
     	}
-        return view('backend.master.index');
+    	return view('backend.master.index');
     }
 
     /**
@@ -69,7 +68,7 @@ class MasterController extends Controller
      */
     public function create()
     {
-        return view('backend.master.create');
+    	return view('backend.master.create');
     }
 
     /**
@@ -81,15 +80,15 @@ class MasterController extends Controller
     public function store(Request $request)
     {
     	// dd($request->all());
-        $master = $request->validate([
-			"po_no" => 'required',
-			"order_no" => 'required',
-			"customer" => 'required',
-			"customer_no" => 'required',
-			"item" => 'required',
-			"article" => 'required',
-			"colour" => 'required',
-			"total_qty" => 'required',
+    	$master = $request->validate([
+    		"po_no" => 'required',
+    		"order_no" => 'required',
+    		"customer" => 'required',
+    		"customer_no" => 'required',
+    		"item" => 'required',
+    		"article" => 'required',
+    		"colour" => 'required',
+    		"total_qty" => 'required',
     	]);
 
     	DB::beginTransaction();
@@ -111,15 +110,15 @@ class MasterController extends Controller
     			foreach ($request->no_ctn[$value] as $k => $v) {
     				// dd($v, $request->barcode_ctn[$value][$k]);
     				MasterItem::create([
-    		 		'master_id' => $masterData->id,
-    		 		'size' => $value,
-    		 		'pairs' => $request->qty_ctn[$value][$k],
-    		 		'no_ctn' => $request->no_ctn[$value][$k],
-    		 		'barcode_ctn' => $request->barcode_ctn[$value][$k],
-    		 		'modul' => 'master',
-    		 		'keterangan' => 'master',
+    					'master_id' => $masterData->id,
+    					'size' => $value,
+    					'pairs' => $request->qty_ctn[$value][$k],
+    					'no_ctn' => $request->no_ctn[$value][$k],
+    					'barcode_ctn' => $request->barcode_ctn[$value][$k],
+    					'modul' => 'master',
+    					'keterangan' => 'master',
     		 		// 'status' => 
-	    		 	]);
+    				]);
     			}
     		}
     		// dd('asdfa');
@@ -148,7 +147,7 @@ class MasterController extends Controller
     public function show($id)
     {
     	$master = Master::find($id);
-		return view('backend.master.show', compact('master'));
+    	return view('backend.master.show', compact('master'));
     }
 
     /**
@@ -157,9 +156,10 @@ class MasterController extends Controller
      * @param  \App\Master  $master
      * @return \Illuminate\Http\Response
      */
-    public function edit(Master $master)
+    public function edit($id)
     {
-        //
+    	$master = Master::find($id);
+    	return view('backend.master.edit', compact('master'));
     }
 
     /**
@@ -169,9 +169,48 @@ class MasterController extends Controller
      * @param  \App\Master  $master
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Master $master)
+    public function update(Request $request, $id)
     {
-        //
+
+    	$master = $request->validate([
+    		"po_no" => 'required',
+    		"order_no" => 'required',
+    		"customer" => 'required',
+    		"customer_no" => 'required',
+    		"item" => 'required',
+    		"article" => 'required',
+    		"colour" => 'required',
+    		"total_qty" => 'required',
+    	]);
+
+    	DB::beginTransaction();
+    	try {
+    		$master['updated_by'] = auth()->user()->id;
+    		$masterData = Master::where('id',$id)->update($master);
+
+    		foreach ($request->masterItem as $key => $value) {
+    			MasterItem::where('id', $key)->update([
+    				'size' => $value['size'],
+    				'pairs' => $value['pairs'],
+    				'no_ctn' => $value['no_ctn'],
+    				'barcode_ctn' => $value['barcode_ctn'],
+    			]);
+    		}
+
+    	} catch (\Exception $e) {
+    		DB::rollback();
+    		toastr()->error($e->getMessage(), 'Error');
+    		return back();
+    	}catch (\Throwable $e) {
+    		DB::rollback();
+    		toastr()->error($e->getMessage(), 'Error');
+    		throw $e;
+    	}
+
+    	DB::commit();
+    	toastr()->success('Data telah diupdate', 'Berhasil');
+    	return redirect( action('MasterController@index'));
+
     }
 
     /**
@@ -180,8 +219,31 @@ class MasterController extends Controller
      * @param  \App\Master  $master
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Master $master)
+    public function destroy($id)
     {
-        //
+    	DB::beginTransaction();
+    	try {
+    		$master = Master::find($id);
+    		$master->masterItems()->delete();
+	        $master->delete();
+
+    	} catch (\Exception $e) {
+    		DB::rollback();
+    		toastr()->error($e->getMessage(), 'Error');
+    		return back();
+    	}catch (\Throwable $e) {
+    		DB::rollback();
+    		toastr()->error($e->getMessage(), 'Error');
+    		throw $e;
+    	}
+    	DB::commit();
+    	toastr()->success('Data telah terhapus', 'Berhasil');
+    	return redirect( action('MasterController@index'));
+    }
+
+    public function delete($id)
+    {
+    	$master = Master::find($id);
+    	return view('backend.master.delete', compact('master'));
     }
 }

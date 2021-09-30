@@ -25,6 +25,7 @@
 			columnDefs: [
 			{targets: [0], className: "text-center",},
 			{targets: 0, width: "15px"},
+			{targets: 9, width: "20%"},
 			],
 			columns: [
 			{data: 'DT_RowIndex', name: 'DT_RowIndex', title: '#'},
