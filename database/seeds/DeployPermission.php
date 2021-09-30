@@ -27,7 +27,7 @@ class DeployPermissionSeeder extends Seeder
     	Permission::create(['name' => 'setting-location']);
     	Permission::create(['name' => 'inspection']);
     	Permission::create(['name' => 'scan-out']);
-    	$user = User::firstOrCreate(['name'=>'super-admin'],[
+    	$user = User::firstOrCreate(['name'=>'super-admin','email' => 'superadmin@situ.com'],[
     		'name' => 'super-admin', 
     		'email' => 'superadmin@situ.com', 
     		'password' => Hash::make('12345678'),
